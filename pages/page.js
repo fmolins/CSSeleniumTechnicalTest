@@ -3,24 +3,30 @@ const loginOptionPosition = 6;
 @abstract
 */
 module.exports = class Page {
-    /**
-    * Opens a sub page of the page
-    * @param path path of the sub page (e.g. /path/to/page.html)
-    */
-     get accountMenu() {
+    
+    get accountMenu() {
         return $('//a[@data-target-element="#header-account"]');
     }
 
-    get accountMenuLoginOption() {
-        return $('//div[@id="header-account"]/div/ul/li[' + loginOptionPosition + ']/a');
+    get searchBar() {
+        return $('#search');
     }
 
-    get btnSubmit() {
-        return $('button[type="submit"]');
+    get searchButton() {
+        return $('//div[@class="input-box"]/button[contains(@class,"search-button")]');
+    }
+
+    async clickOnAccountMenuOption(optionPosition){
+        return $('//div[@id="header-account"]/div/ul/li[' + optionPosition + ']/a').click();
     }
 
     async goToLoginPage () {
         await this.accountMenu.click();
-        await this.accountMenuLoginOption.click();
+        await this.clickOnAccountMenuOption(loginOptionPosition);
+    }
+
+    async searchBy(textToSearch) {
+        await this.searchBar.setValue(textToSearch);
+        await this.searchButton.click();
     }
 }
