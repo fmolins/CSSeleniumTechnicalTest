@@ -1,11 +1,23 @@
-
-
 const Page = require('./page');
 
-class SearchResultsPage extends Page {
+const filterOptions = {category:1, type:2, bed_bath:3, color:4, decor_type:5, fit:6, gender:7, home_decor:8, price:12}
+const priceOptions = {up_to_two_hundred: 1, more_than_two_hundred:2}
+class ResultsPage extends Page {
     
     get results() {
         return $$('//ul[contains(@class,"products-grid")]/li');
+    }
+
+    get filterOptionsMenu() {
+        return $('#narrow-by-list');
+    }
+
+    get filterOptions() {
+        return filterOptions;
+    }
+
+    get priceOptions() {
+        return priceOptions;
     }
 
     async findElementByName(elementName){
@@ -26,11 +38,23 @@ class SearchResultsPage extends Page {
     }
 
     async filterByOption(filteredField, fieldFilterOption) {
-        let filterOptions = await this.filterOptions;
-        let selectedOption = await filterOptions.$('./dt[' + filteredField + ']/ol/li[' + fieldFilterOption + ']/a');
-        await selectedOption.moveTo();
+        let filterOptions = await this.filterOptionsMenu;
+        let selectedOption = await filterOptions.$('./dd[' + filteredField + ']/ol/li[' + fieldFilterOption + ']/a');
+        await selectedOption.scrollIntoView();
         await selectedOption.click();
+    }
+
+    async getResultsPrices() {
+        let products = await this.results;
+        let prices = [];
+        let spanRegularPrice;
+        let price;
+        for (let product of products){
+            price = await product.$('./div[@class="product-info"]/div/p[@class="special-price"]/span[@class="price"]').getText();
+            prices.push(price.replace('$', ''));
+        }
+        return prices;
     }
 }
 
-module.exports = new SearchResultsPage();
+module.exports = new ResultsPage();
