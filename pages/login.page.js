@@ -29,21 +29,11 @@ class LoginPage extends Page {
         return $('#send2');
     }
 
-    get errorMessages() {
-        return $('//ul[contains(@class,"messages")]/li[contains(@class,"error-msg")]');
-    }
-
     async login (email, password) {
         await this.inputEmail.setValue(email);
         await this.inputPassword.setValue(password);
         await this.btnSubmit.click();
     }
-
-    /*async areThereAnyErrors(){
-        let areThereErrors = await this.errorMessages.isExisting();
-        console.log("There are any errors: " + areThereErrors);
-        return areThereErrors;
-    }*/
 }
 
 module.exports = new LoginPage();

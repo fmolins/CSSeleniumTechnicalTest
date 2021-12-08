@@ -8,6 +8,14 @@ module.exports = class Page {
         return $('//a[@data-target-element="#header-account"]');
     }
 
+    get errorMessages() {
+        return $('//ul[contains(@class,"messages")]/li[contains(@class,"error-msg")]');
+    }
+
+    get successMessages() {
+        return $('//ul[contains(@class,"messages")]/li[contains(@class,"success-msg")]');
+    }
+
     get searchBar() {
         return $('#search');
     }
